@@ -44,4 +44,4 @@ class CountSketch(StreamAlgorithm[float]):
         self.s[self.h(element[0])] += element[1] * self.random(element[0])
 
     def __call__(self, i: int) -> float:
-        return self.s[self.h(i)] * self.r(i)
+        return self.s[self.h(i)] * self.random(i)
