@@ -12,7 +12,7 @@ class StreamAlgorithm(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    def __call__(self) -> Any:
+    def __call__(self, *args) -> Any:
         pass
 
     def run(self, stream: Stream) -> Any:
@@ -32,8 +32,8 @@ class AlgorithmGroup(StreamAlgorithm):
         for algorithm in self.algorithms:
             algorithm.update(element)
     
-    def __call__(self):
-        return [algorithm() for algorithm in self.algorithms]
+    def __call__(self, *args):
+        return [algorithm(args) for algorithm in self.algorithms]
     
     def __len__(self) -> int:
         return sum(len(algorithm) for algorithm in self.algorithms)

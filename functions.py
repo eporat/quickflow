@@ -14,8 +14,8 @@ class Map(StreamAlgorithm, Generic[T]):
     def update(self, element) -> None:
         self.algorithms.update(element)
 
-    def __call__(self) -> T:
-        return self.func(self.algorithms(), **self.params)
+    def __call__(self, *args) -> T:
+        return self.func(self.algorithms(*args), **self.params)
 
     def __len__(self):
         return len(self.algorithms)

@@ -1,8 +1,16 @@
 import random
+import hashlib
 
 # TODO: Choose better prime
 PRIME = 18446744073709551557
+MAX_128_INT = 2**128 - 1
 
+def hash(x):
+    return int(hashlib.md5(str(x).encode('ASCII')).hexdigest(), 16)
+
+def random128():
+    return random.randint(0, MAX_128_INT)
+    
 class KWiseIndependentGenerator:
     """
     K-Wise Independent random number generator works only for 64-bit numbers
