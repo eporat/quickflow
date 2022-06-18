@@ -39,9 +39,10 @@ class CountSketch(StreamAlgorithm[float]):
         self.h = lambda x: md5(x ^ self.r) % self.w
         self.s = [0] * self.w
         self.random = KWiseIndependentGenerator(k=4)
+        self.r = lambda i: 2 * (self.random(i) % 2) - 1
 
     def update(self, element: Element):
-        self.s[self.h(element[0])] += element[1] * (2 * (self.random(element[0]) % 2) - 1)
+        self.s[self.h(element[0])] += element[1] * self.r(element[0])
 
     def __call__(self, i: int) -> float:
-        return self.s[self.h(i)] * (2 * (self.random(i) % 2) - 1)
+        return self.s[self.h(i)] * self.r(i)
