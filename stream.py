@@ -45,6 +45,6 @@ def create_group(x: Any, count: int = None, *args, **kwargs):
     if not isinstance(x, Callable):
         raise TypeError("create_group takes as input a list of stream algorithms or a callable")
     if count < 1:
-        raise ValueError("Count cannot be less than 1 in create_group")
+        raise ValueError("count cannot be less than 1 in create_group")
 
     return AlgorithmGroup([x(*args, **kwargs) for _ in range(count)])
