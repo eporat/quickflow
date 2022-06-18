@@ -6,7 +6,9 @@ from count import ApproximateCounting
 import random
 
 a: Stream = zip([random.randint(1, 40) for _ in range(10_000)], [1] * 10_000)
-print(FMAlgorithm(epsilon=0.1).run(a))
+fm = FMAlgorithm(epsilon=0.1)
+print(len(fm))
+print(fm.run(a))
 
 b: Stream = zip([random.randint(1, 40) for _ in range(10_000)], [1] * 10_000)
 algorithm1 = ApproximateCounting(epsilon=.5, delta=0.01)

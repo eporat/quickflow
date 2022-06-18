@@ -1,6 +1,6 @@
-from math import log2
-from functions import Mean
-from math_utils import KWiseIndependentGenerator, hash, random128
+from math import ceil, log2
+from functions import Mean, Min
+from math_utils import KWiseIndependentGenerator, md5, random128
 from stream import Element, StreamAlgorithm, create_group
 
 class AMSSketch(StreamAlgorithm[float]):
@@ -14,13 +14,13 @@ class AMSSketch(StreamAlgorithm[float]):
     def __call__(self) -> float:
         return self.Z ** 2
 
-AMSPlus = lambda epsilon: Mean(create_group(AMSSketch, count=int(1./epsilon ** 2)))
+AMSPlus = lambda epsilon: Mean(create_group(AMSSketch, count=ceil(1./epsilon ** 2)))
 
 class CountMin(StreamAlgorithm[float]):
     def __init__(self, epsilon) -> None:
-        self.w = int(4/epsilon)
+        self.w = ceil(4/epsilon)
         self.random = random128()
-        self.h = lambda x: hash(x ^ self.random) % self.w
+        self.h = lambda x: md5(x ^ self.random) % self.w
         self.s = [0] * self.w
     
     def update(self, element: Element):
@@ -29,12 +29,4 @@ class CountMin(StreamAlgorithm[float]):
     def __call__(self, i: int) -> float:
         return self.s[self.h(i)] 
 
-class CountMinPlus(StreamAlgorithm[float]):
-    def __init__(self, epsilon, n) -> None:
-        self.algorithms = create_group(CountMin, int(log2(n)), epsilon=epsilon)
-    
-    def update(self, element: Element):
-        self.algorithms.update(element)
-
-    def __call__(self, i: int) -> float:
-        return min(self.algorithms(i))
+CountMinPlus = lambda epsilon, n: Min(create_group(CountMin, ceil(log2(n)), epsilon=epsilon))

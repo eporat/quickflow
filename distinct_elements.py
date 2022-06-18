@@ -1,9 +1,7 @@
-import hashlib
-import random
 from functions import Mean
-from math_utils import MAX_128_INT, random128
+from math_utils import MAX_128_INT, md5, random128
 from stream import Element, StreamAlgorithm, create_group
-from statistics import mean
+from math import ceil
 
 class FMAlgorithmHelper(StreamAlgorithm[float]):
     def __init__(self) -> None:
@@ -11,7 +9,7 @@ class FMAlgorithmHelper(StreamAlgorithm[float]):
         self.random = random128()
 
     def update(self, element: Element):
-        self.z = min(self.z, hash(element[0] ^ self.random) / MAX_128_INT)
+        self.z = min(self.z, md5(element[0] ^ self.random) / MAX_128_INT)
 
     def __call__(self) -> float:
         return self.z
@@ -19,7 +17,7 @@ class FMAlgorithmHelper(StreamAlgorithm[float]):
 class FMAlgorithm(StreamAlgorithm[float]):
     def __init__(self, epsilon) -> None:
         self.epsilon = epsilon
-        self.algorithm = Mean(create_group(FMAlgorithmHelper, count=int(1./epsilon**2)))
+        self.algorithm = Mean(create_group(FMAlgorithmHelper, count=ceil(1./epsilon**2)))
 
     def update(self, element: Element):
         self.algorithm.update(element)

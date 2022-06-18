@@ -22,6 +22,9 @@ class StreamAlgorithm(ABC, Generic[T]):
         return self()
 
     def __len__(self) -> int:
+        if hasattr(self, 'algorithm'):
+            return len(self.algorithm)
+
         return 1
 
 class AlgorithmGroup(StreamAlgorithm):
@@ -33,7 +36,7 @@ class AlgorithmGroup(StreamAlgorithm):
             algorithm.update(element)
     
     def __call__(self, *args):
-        return [algorithm(args) for algorithm in self.algorithms]
+        return [algorithm(*args) for algorithm in self.algorithms]
     
     def __len__(self) -> int:
         return sum(len(algorithm) for algorithm in self.algorithms)
