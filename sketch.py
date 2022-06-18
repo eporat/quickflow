@@ -6,10 +6,11 @@ from stream import Element, StreamAlgorithm, create_group
 class AMSSketch(StreamAlgorithm[float]):
     def __init__(self) -> None:
         self.random = KWiseIndependentGenerator(4)
+        self.r = lambda i: 2 * (self.random(i) % 2) - 1
         self.Z = 0
 
     def update(self, element: Element):
-        self.Z += (2 * (self.random(element[0]) % 2) - 1) * element[1]
+        self.Z += self.r(element[0]) * element[1]
 
     def __call__(self) -> float:
         return self.Z ** 2
