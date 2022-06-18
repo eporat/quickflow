@@ -1,5 +1,5 @@
 from functions import Mean, Median
-from stream import StreamAlgorithm, gather
+from stream import StreamAlgorithm, create_group
 import random
 from math import log
 
@@ -18,11 +18,11 @@ class MorrisAlgorithm(StreamAlgorithm[int]):
 
 class MorrisPlus(Mean):
     def __init__(self, epsilon):
-        Mean.__init__(self, gather(MorrisAlgorithm, count=int(1.5/epsilon ** 2)))
+        Mean.__init__(self, create_group(MorrisAlgorithm, count=int(1.5/epsilon ** 2)))
 
 class MorrisPlusPlus(Median):
     def __init__(self, epsilon, delta):
         count = max(1, int(log(1/delta)))
-        Median.__init__(self, gather(MorrisPlus, count=count, epsilon=epsilon))
+        Median.__init__(self, create_group(MorrisPlus, count=count, epsilon=epsilon))
 
 ApproximateCounting = MorrisPlusPlus

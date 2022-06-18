@@ -32,12 +32,12 @@ class AlgorithmGroup(StreamAlgorithm):
     def __call__(self):
         return [algorithm() for algorithm in self.algorithms]
 
-def gather(x: Any, count: int = None, *args, **kwargs):
+def create_group(x: Any, count: int = None, *args, **kwargs):
     if isinstance(x, list):
         return AlgorithmGroup(x)
     
     if not isinstance(x, Callable):
-        raise TypeError("gather takes as input a list of stream algorithms or a callable")
+        raise TypeError("create_group takes as input a list of stream algorithms or a callable")
     if count < 1:
         raise ValueError("Count cannot be negative in Map")
 
