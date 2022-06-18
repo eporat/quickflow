@@ -28,4 +28,9 @@ class KWiseIndependentGenerator:
 
         return b
 
-random_sign = lambda k: 2 * (KWiseIndependentGenerator(k) % 2) - 1
+def random_sign(k):
+    generator = KWiseIndependentGenerator(k)
+    def sign(x):
+        return 2 * (generator(x) % 2) - 1 
+    
+    return sign

@@ -1,4 +1,4 @@
-from functions import Mean
+from functions import Map, Mean
 from math_utils import MAX_128_INT, md5, random128
 from stream import Element, StreamAlgorithm, create_group
 from math import ceil
@@ -14,13 +14,7 @@ class FMAlgorithmHelper(StreamAlgorithm[float]):
     def __call__(self) -> float:
         return self.z
 
-class FMAlgorithm(StreamAlgorithm[float]):
-    def __init__(self, epsilon) -> None:
-        self.epsilon = epsilon
-        self.algorithm = Mean(create_group(FMAlgorithmHelper, count=ceil(1./epsilon**2)))
-
-    def update(self, element: Element):
-        self.algorithm.update(element)
-
-    def __call__(self) -> float:
-        return 1. / self.algorithm() - 1
+FMAlgorithm = lambda epsilon: Map(lambda z: 1.0/z - 1, 
+    Mean(
+        create_group(FMAlgorithmHelper, count=ceil(1./epsilon**2))
+    ))

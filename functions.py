@@ -15,7 +15,7 @@ class Map(StreamAlgorithm, Generic[T]):
 
     def __call__(self, *args) -> T:
         return self.func(self.algorithm(*args), **self.params)
-        
+
 Max = lambda algorithms: Map(max, algorithms)
 Mean = lambda algorithms: Map(mean, algorithms)
 Median = lambda algorithms: Map(median, algorithms)
