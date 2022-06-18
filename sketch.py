@@ -1,12 +1,11 @@
 from math import ceil, log2
 from functions import Mean, Median, Min
-from math_utils import KWiseIndependentGenerator, md5, random128
+from math_utils import random_sign, md5, random128
 from stream import Element, StreamAlgorithm, create_group
 
 class AMSSketch(StreamAlgorithm[float]):
     def __init__(self) -> None:
-        self.random = KWiseIndependentGenerator(4)
-        self.r = lambda i: 2 * (self.random(i) % 2) - 1
+        self.r = random_sign(k=4)
         self.Z = 0
 
     def update(self, element: Element):
@@ -39,8 +38,7 @@ class CountSketch(StreamAlgorithm[float]):
         self.r = random128()
         self.h = lambda x: md5(x ^ self.r) % self.w
         self.s = [0] * self.w
-        self.random = KWiseIndependentGenerator(k=4)
-        self.r = lambda i: 2 * (self.random(i) % 2) - 1
+        self.random = random_sign(k=4)
 
     def update(self, element: Element):
         self.s[self.h(element[0])] += element[1] * self.r(element[0])

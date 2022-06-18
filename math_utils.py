@@ -27,3 +27,5 @@ class KWiseIndependentGenerator:
             b = (self.rs[j] + (b*i) % PRIME) % PRIME
 
         return b
+
+random_sign = lambda k: 2 * (KWiseIndependentGenerator(k) % 2) - 1
