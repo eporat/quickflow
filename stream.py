@@ -21,6 +21,9 @@ class StreamAlgorithm(ABC, Generic[T]):
         
         return self()
 
+    def __len__(self) -> int:
+        return 1
+
 class AlgorithmGroup(StreamAlgorithm):
     def __init__(self, algorithms):
         self.algorithms = algorithms
@@ -31,6 +34,9 @@ class AlgorithmGroup(StreamAlgorithm):
     
     def __call__(self):
         return [algorithm() for algorithm in self.algorithms]
+    
+    def __len__(self) -> int:
+        return sum(len(algorithm) for algorithm in self.algorithms)
 
 def create_group(x: Any, count: int = None, *args, **kwargs):
     if isinstance(x, list):

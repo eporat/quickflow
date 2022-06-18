@@ -17,6 +17,9 @@ class Map(StreamAlgorithm, Generic[T]):
     def __call__(self) -> T:
         return self.func(self.algorithms(), **self.params)
 
+    def __len__(self):
+        return len(self.algorithms)
+
 class Mean(Map[float]):
     def __init__(self, algorithms: AlgorithmGroup) -> None:
         Map.__init__(self, mean, algorithms)
